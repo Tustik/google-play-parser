@@ -9,10 +9,14 @@ import ru.tustik.googleplay.vo.AppInfo;
 import java.io.IOException;
 
 public class JSoupAppInfoParser implements AppInfoParser {
+
+    public static final String CATEGORY_SELECTOR = "span.T32cc.UAO9ie";
+    public static final String HEADER_SELECTOR = "h1 span";
+
     @Override
     public AppInfo parceCategory(String appId) {
         try {
-            AppInfo appInfo = new AppInfo();
+            AppInfo appInfo = new AppInfo(appId);
             Document doc = Jsoup.connect("https://play.google.com/store/apps/details?id=" + appId)
                     .header("Content-Type","text/html")
                     .header("Upgrade-Insecure-Requests","1")
@@ -27,8 +31,12 @@ public class JSoupAppInfoParser implements AppInfoParser {
                     .timeout(12000)
                     .followRedirects(true)
                     .get();
-            Element category = doc.select("span.T32cc.UAO9ie").last().select("a").first();
+            Element category = doc.select(CATEGORY_SELECTOR).last().selectFirst("a");
             appInfo.setAppCategory(category.text());
+            Element dev = doc.select(CATEGORY_SELECTOR).first().selectFirst("a");
+            appInfo.setDeveloper(dev.text());
+            Element header = doc.selectFirst(HEADER_SELECTOR);
+            appInfo.setAppName(header.text());
             return appInfo;
 
         } catch (IOException e) {
