@@ -15,9 +15,14 @@ public class JSoupAppInfoParser implements AppInfoParser {
 
     @Override
     public AppInfo parceCategory(String appId) {
+        return parceCategory(appId, "en");
+    }
+
+    @Override
+    public AppInfo parceCategory(String appId, String lang) {
         try {
             AppInfo appInfo = new AppInfo(appId);
-            Document doc = Jsoup.connect("https://play.google.com/store/apps/details?id=" + appId)
+            Document doc = Jsoup.connect(String.format("https://play.google.com/store/apps/details?id=%s&hl=%s", appId, lang))
                     .header("Content-Type","text/html")
                     .header("Upgrade-Insecure-Requests","1")
                     .header("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3")

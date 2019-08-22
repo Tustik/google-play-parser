@@ -17,4 +17,15 @@ public class JSoupAppInfoParserTest {
         expected.setAppCategory("Puzzle");
         Assert.assertEquals(expected, actual);
     }
+
+    @Test
+    public void parserTestRu() {
+        AppInfoParser parser = new JSoupAppInfoParser();
+        AppInfo actual = parser.parceCategory("com.whaleapp.resorthotel", "ru");
+        AppInfo expected = new AppInfo("com.whaleapp.resorthotel");
+        expected.setAppName("Resort Hotel: Bay Story");
+        expected.setDeveloper("WhaleApp LTD");
+        expected.setAppCategory("Головоломки");
+        Assert.assertEquals(expected, actual);
+    }
 }
